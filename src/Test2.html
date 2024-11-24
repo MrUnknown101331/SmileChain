@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubbles Animation</title>
+    <style>
+        /* General Container Styling */
+        .container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+
+        /* Hidden bubbles (initial state) */
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bubbles div {
+            position: absolute;
+            width: calc(0.2px + 0.5px * var(--bubble-size));
+            height: calc(0.2px + 0.5px * var(--bubble-size));
+            border-radius: 50%;
+            background-color: rgba(0, 150, 255, 0.8);
+            visibility: hidden;
+            transform: translate(0, 0) scale(0);
+            transition: transform 1s ease-out, visibility 0s 0.5s;
+        }
+
+        /* Visible state: Spread bubbles randomly */
+        .bubbles_spread div {
+            visibility: visible;
+            transform: translate(var(--random-x), var(--random-y)) scale(1);
+            transition: transform 1s ease-out;
+        }
+
+        /* Button Styling */
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="bubbles"></div>
+</div>
+<button onclick="triggerAnimation()">Spread Bubbles</button>
+
+<script>
+    function generateBubbles() {
+        const container = document.querySelector(".bubbles");
+        container.innerHTML = ""; // Clear existing bubbles
+
+        for (let i = 0; i < 20; i++) {
+            const bubble = document.createElement("div");
+            const randomX = `${Math.random() * 200 - 100}px`; // Random X position
+            const randomY = `${Math.random() * 200 - 100}px`; // Random Y position
+            const bubbleSize = Math.random(); // Random size
+
+            // Set custom properties for animation
+            bubble.style.setProperty("--random-x", randomX);
+            bubble.style.setProperty("--random-y", randomY);
+            bubble.style.setProperty("--bubble-size", bubbleSize);
+
+            container.appendChild(bubble);
+        }
+    }
+
+    function triggerAnimation() {
+        const container = document.querySelector(".bubbles");
+        generateBubbles(); // Generate fresh bubbles
+
+        // Trigger the spread animation
+        container.classList.add("bubbles_spread");
+
+        // Reset the animation after it's done
+        setTimeout(() => {
+            container.classList.remove("bubbles_spread");
+        }, 2000); // 2 seconds matches CSS transition time
+    }
+
+    // Initialize bubbles on page load
+    generateBubbles();
+</script>
+</body>
+</html>
